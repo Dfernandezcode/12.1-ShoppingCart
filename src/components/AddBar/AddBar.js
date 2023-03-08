@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useMemo} from "react";
 import ProductItem from "../ProductItem/ProductItem";
 import "./AddBar.css";
 
@@ -10,6 +10,25 @@ const AddBar = () => {
     { name: "Arroz", price: 1, id: 3 },
     { name: "Queso", price: 5, id: 4 },
   ]);
+
+
+
+  //TOTAL
+        //LESS OPTIMAL
+          //const [totalPrice, setTotalPrice] = useState(0)
+          // useEffect(() => {
+          //   const newTotalPrice = productList.reduce((total, product) => {
+          //     return total + parseFloat(product.price);
+          //   }, 0);
+          //   setTotalPrice(newTotalPrice);
+          // }, [productList]); 
+  
+  //useMemo function --> more optimized.
+  const totalPrice = useMemo(() => {
+    return productList.reduce((total, product) => {
+      return total + parseFloat(product.price);
+    }, 0);
+  }, [productList]);
 
   const [addProduct, setAddProduct] = React.useState({
     name: "",
@@ -28,13 +47,23 @@ const AddBar = () => {
     setProductList([...productList, newProductAdd]);
   };
 
+  //clear input
+  // const inputReference = React.useState(null);
 
-  return (  
+  // const onSubmit = React.useCallback((event) => {
+  //   event.preventDefault();
+  //   inputReference = addProduct.value = "";
+  // });
+
+  return (
     <div className="addcart">
-    {/*Add new item function*/}
+      {/*Add new item function*/}
 
       <h1 className="addcart__title">Carrito</h1>
-      <form className="addcart__box" onSubmit={(event) => addNewProduct(event)}>
+      <form
+        className="addcart__box"
+        onSubmit={(event) => addNewProduct(event)}
+      >
         <p>
           <label>
             <input
@@ -72,14 +101,16 @@ const AddBar = () => {
         <button type="submit">Añadir producto</button>
       </form>
 
-{/*Product List*/}      
+      {/*Product List*/}
       <div>
         <h2>Productos</h2>
-        {productList.map(product => <ProductItem key={product.id} product={product}></ProductItem>)}
+        {productList.map((product) => (
+          <ProductItem key={product.id} product={product}></ProductItem>
+        ))}
       </div>
 
-{/*TOTAL*/}
-        <h1>Total:</h1>
+      {/*TOTAL*/}
+      <h1>Total: ${totalPrice}</h1>
     </div>
   );
 };
