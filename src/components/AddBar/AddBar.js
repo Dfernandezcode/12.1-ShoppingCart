@@ -1,4 +1,4 @@
-import React, {useMemo} from "react";
+import React, { useMemo } from "react";
 import ProductItem from "../ProductItem/ProductItem";
 import "./AddBar.css";
 
@@ -11,18 +11,16 @@ const AddBar = () => {
     { name: "Queso", price: 5, id: 4 },
   ]);
 
-
-
   //TOTAL
-        //LESS OPTIMAL
-          //const [totalPrice, setTotalPrice] = useState(0)
-          // useEffect(() => {
-          //   const newTotalPrice = productList.reduce((total, product) => {
-          //     return total + parseFloat(product.price);
-          //   }, 0);
-          //   setTotalPrice(newTotalPrice);
-          // }, [productList]); 
-  
+  //LESS OPTIMAL
+  //const [totalPrice, setTotalPrice] = useState(0)
+  // useEffect(() => {
+  //   const newTotalPrice = productList.reduce((total, product) => {
+  //     return total + parseFloat(product.price);
+  //   }, 0);
+  //   setTotalPrice(newTotalPrice);
+  // }, [productList]);
+
   //useMemo function --> more optimized.
   const totalPrice = useMemo(() => {
     return productList.reduce((total, product) => {
@@ -47,6 +45,11 @@ const AddBar = () => {
     setProductList([...productList, newProductAdd]);
   };
 
+  // delete product
+  const deleteProduct = (id) => {
+    setProductList(productList.filter((product) => product.id !== id));
+  };
+
   //clear input
   // const inputReference = React.useState(null);
 
@@ -60,10 +63,7 @@ const AddBar = () => {
       {/*Add new item function*/}
 
       <h1 className="addcart__title">Carrito</h1>
-      <form
-        className="addcart__box"
-        onSubmit={(event) => addNewProduct(event)}
-      >
+      <form className="addcart__box" onSubmit={(event) => addNewProduct(event)}>
         <p>
           <label>
             <input
@@ -105,7 +105,11 @@ const AddBar = () => {
       <div>
         <h2>Productos</h2>
         {productList.map((product) => (
-          <ProductItem key={product.id} product={product}></ProductItem>
+          <ProductItem
+            key={product.id}
+            product={product}
+            deleteProduct={deleteProduct}
+          ></ProductItem>
         ))}
       </div>
 
